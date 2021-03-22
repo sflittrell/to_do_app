@@ -7,15 +7,38 @@ class App extends React.Component {
 
   constructor() {
     super();
-    this.taskArr = [];
+    this.test = 'test';
     this.state = {
-
+      taskArr: [],
+      taskInput: 'Task input goes here',
+      completed: false
     }
+
+    this.submitBtn = this.submitBtn.bind(this)
+    this.handleChange = this.handleChange.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(e) {
+    this.state.taskInput = e.target.value;
+    console.log(this.state.taskInput);
+  }
+
+  handleSubmit(e) {
+    this.setState({taskArr: [this.state.taskInput]})
+    this.setState({taskInput: ''})
+    e.preventDefault();
   }
 
   itemsLeft() {
-    return this.taskArr.length;
+    return this.state.taskArr.length;
   }
+
+  submitBtn(e) {
+    
+  }
+
+
 
   render() {
     return (
@@ -25,19 +48,25 @@ class App extends React.Component {
             <div className="row">
               <header className="App-header">
                 To Do List
-        </header>
+              </header>
             </div>
             <div className="row">
               <div className="input-group mb-3">
-                <input type="text" class="form-control" placeholder="What needs to be done?" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Submit</button>
+              <form onSubmit={this.handleSubmit}>
+                <input 
+                type="text" 
+                className="form-control" 
+                placeholder="What needs to be done?" 
+                onChange={this.handleChange}  
+                />
+                <input className="btn btn-outline-secondary" type="submit" value="Submit" />
+                {/* <button className="btn btn-outline-secondary" type="button" id="subBtn" onClick={this.submitBtn}>Submit</button> */}
+                </form>
               </div>
             </div>
             <div className="row">
               <ul className="tasks list-unstyled">
-                <li>
-                  <Task />
-                </li>
+                  <Task taskInput={this.state.taskArr[0]} />
               </ul>
             </div>
             <div className="row">
