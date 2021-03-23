@@ -10,37 +10,41 @@ class App extends React.Component {
     this.test = 'test';
     this.state = {
       taskArr: [],
-      taskInput: 'Task input goes here',
+      taskInput: '',
       completed: false
     }
 
-    this.submitBtn = this.submitBtn.bind(this)
     this.handleChange = this.handleChange.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(e) {
-    this.state.taskInput = e.target.value;
-    console.log(this.state.taskInput);
+    this.setState({ taskInput: e.target.value })
+    console.log(this.state.taskInput)
+  }
+  handleSubmit(e) {
+    if (this.state.taskInput !== '') {
+      console.log(this.state.taskInput)
+      this.setState({
+        taskArr: [...this.state.taskArr, this.state.taskInput],
+        taskInput: ''
+      })
+    }
+    e.preventDefault();
   }
 
-  handleSubmit(e) {
-    this.setState({taskArr: [this.state.taskInput]})
-    this.setState({taskInput: ''})
-    e.preventDefault();
+  renderedTasks(item, index) {
+    return <Task taskInput={item} key={index} />
   }
 
   itemsLeft() {
     return this.state.taskArr.length;
   }
 
-  submitBtn(e) {
-    
-  }
-
 
 
   render() {
+
     return (
       <div className="container">
         <div className="row mt-5">
@@ -52,21 +56,20 @@ class App extends React.Component {
             </div>
             <div className="row">
               <div className="input-group mb-3">
-              <form onSubmit={this.handleSubmit}>
-                <input 
-                type="text" 
-                className="form-control" 
-                placeholder="What needs to be done?" 
-                onChange={this.handleChange}  
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="What needs to be done?"
+                  onChange={this.handleChange}
                 />
-                <input className="btn btn-outline-secondary" type="submit" value="Submit" />
-                {/* <button className="btn btn-outline-secondary" type="button" id="subBtn" onClick={this.submitBtn}>Submit</button> */}
-                </form>
+                {/* <input className="btn btn-outline-secondary" type="submit" value="Submit" /> */}
+                <button className="btn btn-outline-secondary" type="button" id="subBtn" onClick={this.handleSubmit}>Submit</button>
               </div>
             </div>
             <div className="row">
               <ul className="tasks list-unstyled">
-                  <Task taskInput={this.state.taskArr[0]} />
+                {this.state.taskArr.map(this.renderedTasks)}
+
               </ul>
             </div>
             <div className="row">

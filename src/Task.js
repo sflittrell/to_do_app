@@ -5,8 +5,6 @@ function Task(props) {
 
     // console.log(props)
 
-
-
         return (
             <li>
             <div className="task text-start">
@@ -19,7 +17,7 @@ function Task(props) {
                     <label 
                     className="form-check-label ms-2" 
                     htmlFor="flexCheckDefault">
-                        {props.taskArr}
+                        {props.taskInput}
                     </label>
                     <button 
                     type="button" 
