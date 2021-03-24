@@ -22,13 +22,12 @@ function Task(props) {
             <div className="task text-start">
                 <div className="form-check border p-3">
                     {/* {checkBtn()} */}
-                    <button
+                    <i
                         type="button"
-                        className="btn btn-sm btn-outline-secondary"
+                        className={props.newTask.completed ? "bi bi-check-circle-fill" : "bi bi-circle"}
                         onClick={setCompleted}
                     >
-                        Completed
-                    </button>
+                    </i>
                     <span className={props.newTask.completed ? "text-decoration-line-through ms-2" : "ms-2"}>
                         {props.newTask.taskText}</span>
                     <button

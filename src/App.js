@@ -10,12 +10,21 @@ class App extends React.Component {
     this.state = {
       taskArr: [],
       taskInput: '',
+      sorted: 'all',
     }
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.closeTask = this.closeTask.bind(this);
     this.completed = this.completed.bind(this);
+    this.clearAll = this.clearAll.bind(this);
+  }
+
+  taskFilter() {
+    let renderArr = this.state.taskArr;
+    if (this.state.taskArr) {
+
+    }
   }
 
   handleChange(e) {
@@ -60,17 +69,35 @@ class App extends React.Component {
     // console.log(filteredTasks);
     // console.log(this.state.taskArr)
     this.setState({ taskArr: filteredTasks });
-    console.log(this.state.taskArr)
+    // console.log(this.state.taskArr)
 
+  }
+
+  clearAll() {
+    const allCompleted = this.state.taskArr.filter(task => !task.completed)
+    this.setState({taskArr: allCompleted})
   }
 
 
   itemsLeft() {
-    return this.state.taskArr.length;
+    const allActive = this.state.taskArr.filter(task => !task.completed)
+    return allActive.length;
   }
 
   render() {
-
+    // let filteredArr = this.state.taskArr.filter(el => el.completed === false)
+    // let filteredArr = this.state.taskArr;
+    let filteredArr = this.state.taskArr.filter(item => {
+      if (this.state.sorted === 'all') {
+        return item;
+      } else if (this.state.sorted === 'active' && !item.completed) {
+        return item;
+      } else if (this.state.sorted === 'completed' && item.completed) {
+        return item;
+      }
+    })
+    
+    
     return (
       <div className="container">
         <div className="row mt-5">
@@ -100,7 +127,7 @@ class App extends React.Component {
             </div>
             <div className="row">
               <ul className="tasks list-unstyled">
-                {this.state.taskArr.map((item, index) => <Task
+                {/*this.state.taskArr*/filteredArr.map((item, index) => <Task
                   newTask={item}
                   key={index}
                   closeTask={this.closeTask}
@@ -114,16 +141,16 @@ class App extends React.Component {
                 <h6>{this.itemsLeft()} items left</h6>
               </div>
               <div className="col-2 offset-1">
-                <button type="button" className="btn btn-sm"><h6>All</h6></button>
+                <button type="button" className="btn btn-sm" onClick={() => this.setState({sorted: 'all'})}><h6>All</h6></button>
               </div>
               <div className="col-2">
-                <button type="button" className="btn btn-sm"><h6>Active</h6></button>
+                <button type="button" className="btn btn-sm" onClick={() => this.setState({sorted: 'active'})}><h6>Active</h6></button>
               </div>
               <div className="col-2">
-                <button type="button" className="btn btn-sm"><h6>Completed</h6></button>
+                <button type="button" className="btn btn-sm" onClick={() => this.setState({sorted: 'completed'})}><h6>Completed</h6></button>
               </div>
               <div className="col-2 offset-1">
-                <button type="button" className="btn btn-sm"><h6>Clear Completed</h6></button>
+                <button type="button" className="btn btn-sm"onClick={this.clearAll}><h6>Clear Completed</h6></button>
               </div>
             </div>
           </div>
