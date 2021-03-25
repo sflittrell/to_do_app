@@ -17,6 +17,10 @@ function Task(props) {
         props.completed(props.newTask.id);
     }
 
+    function restoreDeleted() {
+        props.restore(props.newTask.id)
+    }
+
     return (
         <li>
             <div className="task text-start border p-3 d-flex">
@@ -29,12 +33,10 @@ function Task(props) {
                     </i>
                     <span className={props.newTask.completed ? "text-decoration-line-through ms-2" : "ms-2"}>
                         {props.newTask.taskText}</span>
-                    <button
-                        type="button"
-                        className="btn-close btn-sm ms-auto"
-                        onClick={deleteItem}
-                    >
-                    </button>
+                    {props.newTask.deleted ? <button type="button" className="btn btn-sm btn-outline-secondary ms-auto" onClick={restoreDeleted}>Restore</button> : 
+                    <button type="button" className="btn-close btn-sm ms-auto" onClick={deleteItem}></button>}
+                        
+                    
                 </div>
         </li>
     )

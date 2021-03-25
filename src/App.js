@@ -11,6 +11,7 @@ class App extends React.Component {
       taskArr: [],
       taskInput: '',
       sorted: 'all',
+      deleted: false,
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -18,6 +19,7 @@ class App extends React.Component {
     this.closeTask = this.closeTask.bind(this);
     this.completed = this.completed.bind(this);
     this.clearAll = this.clearAll.bind(this);
+    this.restore = this.restore.bind(this);
   }
 
   componentDidMount() {
@@ -65,38 +67,55 @@ class App extends React.Component {
   }
 
   closeTask(id) {
+    this.setState({
+      taskArr: this.state.taskArr.map(newTask => {
+        if (newTask.id === id) {
+          newTask.deleted = !newTask.deleted
+        }
+        return newTask
+      })
+    })
     // function filterHelper(task) {
     //   if (task.id !== id) {
     //     return task
     //   }
     // }
-    const filteredTasks = this.state.taskArr.filter(task => task.id !== id);
-
-    // console.log(filteredTasks);
-    // console.log(this.state.taskArr)
-    this.setState({ taskArr: filteredTasks });
-    // console.log(this.state.taskArr)
+    // const filteredTasks = this.state.taskArr.filter(task => !task.deleted);
+    // this.setState({ taskArr: filteredTasks });
   }
 
   clearAll() {
     const allCompleted = this.state.taskArr.filter(task => !task.completed)
-    this.setState({ taskArr: allCompleted })
+    this.setState({ deleted: allCompleted.map(task => task.deleted = true) })
+  }
+
+  restore(id) {
+    this.setState({
+      taskArr: this.state.taskArr.map(newTask => {
+        if (newTask.id === id) {
+          newTask.deleted = !newTask.deleted
+        }
+        return newTask
+      })
+    })
   }
 
   itemsLeft() {
-    const allActive = this.state.taskArr.filter(task => !task.completed)
+    const allActive = this.state.taskArr.filter(task => !task.completed && !task.deleted)
     return allActive.length;
   }
 
   render() {
-    // let filteredArr = this.state.taskArr.filter(el => el.completed === false)
+    // let filteredArr = this.state.taskArr.filter(el => el.deleted === false)
     // let filteredArr = this.state.taskArr;
     let filteredArr = this.state.taskArr.filter(item => {
-      if (this.state.sorted === 'all') {
+      if (this.state.sorted === 'all' && !item.deleted) {
         return item;
-      } else if (this.state.sorted === 'active' && !item.completed) {
+      } else if (this.state.sorted === 'active' && !item.completed && !item.deleted) {
         return item;
-      } else if (this.state.sorted === 'completed' && item.completed) {
+      } else if (this.state.sorted === 'completed' && item.completed && !item.deleted) {
+        return item;
+      } else if (this.state.sorted === 'deleted' && item.deleted) {
         return item;
       }
     })
@@ -131,15 +150,16 @@ class App extends React.Component {
                   key={index}
                   closeTask={this.closeTask}
                   completed={this.completed}
+                  restore={this.restore}
                 />)}
 
               </ul>
             </div>
-            <div className="row">
+            <div className="row d-flex justify-content-evenly align-items-center">
               <div className="col-2">
                 <h6>{this.itemsLeft()} items left</h6>
               </div>
-              <div className="col-2 offset-1">
+              <div className="col-2">
                 <button type="button" className="btn btn-sm" onClick={() => this.setState({ sorted: 'all' })}><h6>All</h6></button>
               </div>
               <div className="col-2">
@@ -148,7 +168,10 @@ class App extends React.Component {
               <div className="col-2">
                 <button type="button" className="btn btn-sm" onClick={() => this.setState({ sorted: 'completed' })}><h6>Completed</h6></button>
               </div>
-              <div className="col-2 offset-1">
+              <div className="col-2">
+                <button type="button" className="btn btn-sm" onClick={() => this.setState({ sorted: 'deleted' })}><h6>Deleted</h6></button>
+              </div>
+              <div className="col-2">
                 <button type="button" className="btn btn-sm" onClick={this.clearAll}><h6>Clear Completed</h6></button>
               </div>
             </div>
