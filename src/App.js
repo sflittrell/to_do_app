@@ -84,6 +84,8 @@ class App extends React.Component {
     // this.setState({ taskArr: filteredTasks });
   }
 
+  
+
   clearAll() {
     const allCompleted = this.state.taskArr.filter(task => task.completed)
     this.setState({ allCompleted: allCompleted.map(task => task.deleted = true) })
