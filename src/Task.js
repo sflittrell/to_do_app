@@ -19,8 +19,7 @@ function Task(props) {
 
     return (
         <li>
-            <div className="task text-start">
-                <div className="form-check border p-3">
+            <div className="task text-start border p-3 d-flex">
                     {/* {checkBtn()} */}
                     <i
                         type="button"
@@ -32,12 +31,11 @@ function Task(props) {
                         {props.newTask.taskText}</span>
                     <button
                         type="button"
-                        className="btn-close btn-sm position-absolute end-0 me-4"
+                        className="btn-close btn-sm ms-auto"
                         onClick={deleteItem}
                     >
                     </button>
                 </div>
-            </div>
         </li>
     )
 }

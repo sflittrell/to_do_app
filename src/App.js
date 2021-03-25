@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+// import { render } from '@testing-library/react';
 import './App.css';
 import Task from './Task';
 
@@ -20,11 +20,17 @@ class App extends React.Component {
     this.clearAll = this.clearAll.bind(this);
   }
 
-  taskFilter() {
-    let renderArr = this.state.taskArr;
-    if (this.state.taskArr) {
-
+  componentDidMount() {
+    let taskArr = window.localStorage.getItem('taskArr')
+    if (taskArr) {
+      this.setState({ taskArr: JSON.parse(taskArr) })
+    } else {
+      window.localStorage.setItem('taskArr', [])
     }
+  }
+
+  componentDidUpdate() {
+    window.localStorage.setItem('taskArr', JSON.stringify(this.state.taskArr))
   }
 
   handleChange(e) {
@@ -70,14 +76,12 @@ class App extends React.Component {
     // console.log(this.state.taskArr)
     this.setState({ taskArr: filteredTasks });
     // console.log(this.state.taskArr)
-
   }
 
   clearAll() {
     const allCompleted = this.state.taskArr.filter(task => !task.completed)
-    this.setState({taskArr: allCompleted})
+    this.setState({ taskArr: allCompleted })
   }
-
 
   itemsLeft() {
     const allActive = this.state.taskArr.filter(task => !task.completed)
@@ -96,18 +100,14 @@ class App extends React.Component {
         return item;
       }
     })
-    
-    
+
     return (
       <div className="container">
         <div className="row mt-5">
           <div className="col border m-1 text-center bg-light">
-            <div className="row">
               <header className="App-header">
                 To Do List
-              </header>
-            </div>
-            <div className="row">
+              </header>      
               <div className="input-group mb-3">
                 <input
                   type="text"
@@ -123,8 +123,7 @@ class App extends React.Component {
                   onClick={this.handleSubmit}>
                   Submit
                 </button>
-              </div>
-            </div>
+              </div>         
             <div className="row">
               <ul className="tasks list-unstyled">
                 {/*this.state.taskArr*/filteredArr.map((item, index) => <Task
@@ -141,16 +140,16 @@ class App extends React.Component {
                 <h6>{this.itemsLeft()} items left</h6>
               </div>
               <div className="col-2 offset-1">
-                <button type="button" className="btn btn-sm" onClick={() => this.setState({sorted: 'all'})}><h6>All</h6></button>
+                <button type="button" className="btn btn-sm" onClick={() => this.setState({ sorted: 'all' })}><h6>All</h6></button>
               </div>
               <div className="col-2">
-                <button type="button" className="btn btn-sm" onClick={() => this.setState({sorted: 'active'})}><h6>Active</h6></button>
+                <button type="button" className="btn btn-sm" onClick={() => this.setState({ sorted: 'active' })}><h6>Active</h6></button>
               </div>
               <div className="col-2">
-                <button type="button" className="btn btn-sm" onClick={() => this.setState({sorted: 'completed'})}><h6>Completed</h6></button>
+                <button type="button" className="btn btn-sm" onClick={() => this.setState({ sorted: 'completed' })}><h6>Completed</h6></button>
               </div>
               <div className="col-2 offset-1">
-                <button type="button" className="btn btn-sm"onClick={this.clearAll}><h6>Clear Completed</h6></button>
+                <button type="button" className="btn btn-sm" onClick={this.clearAll}><h6>Clear Completed</h6></button>
               </div>
             </div>
           </div>
