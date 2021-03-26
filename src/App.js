@@ -11,17 +11,18 @@ class App extends React.Component {
       taskArr: [],
       taskInput: '',
       sorted: 'all',
-      deleted: false,
     }
 
+    // binds all the functions to the app rather than the button that is clicked
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.closeTask = this.closeTask.bind(this);
+    this.deleteRestoreTask = this.deleteRestoreTask.bind(this);
     this.completed = this.completed.bind(this);
     this.clearAll = this.clearAll.bind(this);
-    this.restore = this.restore.bind(this);
+    // this.restore = this.restore.bind(this);
   }
 
+  // pulls the array of tasks from the local storage
   componentDidMount() {
     let taskArr = window.localStorage.getItem('taskArr')
     if (taskArr) {
@@ -31,30 +32,35 @@ class App extends React.Component {
     }
   }
 
+  // updates the local storage with the task array every time you set state
   componentDidUpdate() {
     window.localStorage.setItem('taskArr', JSON.stringify(this.state.taskArr))
   }
 
+  // inputs the text (setting state at every key press) into the state
   handleChange(e) {
     this.setState({ taskInput: e.target.value })
     // console.log(this.state.taskInput)
   }
+
+  // when the submit button is clicked creates a new item(with specific properties), adds it to the task array, and clears out the text from the input
   handleSubmit(e) {
     if (this.state.taskInput !== '') {
       let newTask = {
         id: Date.now(),
         taskText: this.state.taskInput,
-        completed: false
+        completed: false,
+        deleted: false
       }
-      // console.log(this.state.taskInput)
       this.setState({
-        taskArr: [...this.state.taskArr, newTask],
+        taskArr: [...this.state.taskArr, newTask], // ...deconstructs the array, adds a new item, and the [] makes it into a new array
         taskInput: '',
       })
     }
     e.preventDefault();
   }
 
+  // updates a tasks, marks a task as completed or not
   completed(id) {
     this.setState({
       taskArr: this.state.taskArr.map(newTask => {
@@ -66,7 +72,8 @@ class App extends React.Component {
     })
   }
 
-  closeTask(id) {
+  // updates a tasks, marks a task as deleted or not
+  deleteRestoreTask(id) {
     this.setState({
       taskArr: this.state.taskArr.map(newTask => {
         if (newTask.id === id) {
@@ -84,22 +91,10 @@ class App extends React.Component {
     // this.setState({ taskArr: filteredTasks });
   }
 
-  
 
   clearAll() {
     const allCompleted = this.state.taskArr.filter(task => task.completed)
     this.setState({ allCompleted: allCompleted.map(task => task.deleted = true) })
-  }
-
-  restore(id) {
-    this.setState({
-      taskArr: this.state.taskArr.map(newTask => {
-        if (newTask.id === id) {
-          newTask.deleted = !newTask.deleted
-        }
-        return newTask
-      })
-    })
   }
 
   itemsLeft() {
@@ -150,9 +145,9 @@ class App extends React.Component {
                 {/*this.state.taskArr*/filteredArr.map((item, index) => <Task
                   newTask={item}
                   key={index}
-                  closeTask={this.closeTask}
+                  deleteRestoreTask={this.deleteRestoreTask}
                   completed={this.completed}
-                  restore={this.restore}
+                  // restore={this.restore}
                 />)}
 
               </ul>
