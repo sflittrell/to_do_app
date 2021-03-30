@@ -121,25 +121,25 @@ class App extends React.Component {
       <div className="container">
         <div className="row mt-5">
           <div className="col border m-1 text-center bg-light">
-              <header className="App-header">
-                To Do List
-              </header>      
-              <div className="input-group mb-3">
-                <input
-                  type="text"
-                  value={this.state.taskInput}
-                  className="form-control"
-                  placeholder="What needs to be done?"
-                  onChange={this.handleChange}
-                />
-                <button
-                  className="btn btn-outline-secondary"
-                  // value={this.state.taskInput}
-                  type="button" id="subBtn"
-                  onClick={this.handleSubmit}>
-                  Submit
+            <header className="App-header">
+              To Do List
+              </header>
+            <div className="input-group mb-3">
+              <input
+                type="text"
+                value={this.state.taskInput}
+                className="form-control"
+                placeholder="What needs to be done?"
+                onChange={this.handleChange}
+              />
+              <button
+                className="btn btn-outline-secondary"
+                // value={this.state.taskInput}
+                type="button" id="subBtn"
+                onClick={this.handleSubmit}>
+                Submit
                 </button>
-              </div>         
+            </div>
             <div className="row">
               <ul className="tasks list-unstyled">
                 {/*this.state.taskArr*/filteredArr.map((item, index) => <Task
@@ -147,7 +147,7 @@ class App extends React.Component {
                   key={index}
                   deleteRestoreTask={this.deleteRestoreTask}
                   completed={this.completed}
-                  // restore={this.restore}
+                // restore={this.restore}
                 />)}
 
               </ul>
